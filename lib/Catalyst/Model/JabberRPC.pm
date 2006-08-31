@@ -7,7 +7,7 @@ use Carp;
 use NEXT;
 use Jabber::RPC::Client;
 
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 our $AUTOLOAD;
 
 

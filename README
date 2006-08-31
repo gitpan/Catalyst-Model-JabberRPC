@@ -1,4 +1,4 @@
-Catalyst::Model::JabberRPC version 0.01
+Catalyst::Model::JabberRPC version 0.02
 =======================================
 
 Catalyst model that provide a simple way to communicate with remote processes
