@@ -3,12 +3,12 @@ use base qw/Catalyst::Model/;
 use strict;
 use warnings;
 
-use Carp;
 use NEXT;
+use Carp qw(croak);
 use Jabber::RPC::Client;
 
-our $VERSION = '0.02';
-our $AUTOLOAD;
+
+our $VERSION = '0.03';
 
 
 sub new {
@@ -16,35 +16,33 @@ sub new {
 
     my $self = $class->NEXT::new($c, $config);
 
-    return $self;
-}
-
-
-sub _client {
-    my $self = shift;
-    my %config = %{ $self->config };
+    my %jabber_config = %{ $self->config };
 
     for my $key (qw/server identauth endpoint/) {
-        croak "Must provide $key" unless exists $config{$key};
+        croak "Must provide $key" unless exists $jabber_config{$key};
     }
 
-    my $client = Jabber::RPC::Client->new(%config);
+    my $client = Jabber::RPC::Client->new(%jabber_config);
     croak "Can't create Jabber::RPC::Client object"
         unless UNIVERSAL::isa($client, 'Jabber::RPC::Client');
 
-    return $client;
+    $self->{jabber_client} = $client;
+
+    $c->log->debug("New Jabber::RPC::Client created") if $c->debug;
+
+    return $self;
 }
 
 
 sub AUTOLOAD {
     my ($self, @args) = @_;
+    our $AUTOLOAD;
     
     return if $AUTOLOAD =~ /::DESTROY$/;
 
     (my $op = $AUTOLOAD) =~ s/^.*:://;
 
-    # Create a new client connection
-    my $client = $self->_client;
+    my $client = $self->{jabber_client};
 
     if (my $msg = $client->$op(@args)) {
         if (ref $msg eq 'HASH' && exists $msg->{faultString}) {
@@ -121,13 +119,7 @@ B<faultString>.
 
 =head1 SEE ALSO
 
-=over 1
-
-=item * L<Jabber::RPC::Client>
-
-=item * L<Catalyst::Model>
-
-=back
+L<Jabber::RPC::Client>, L<Catalyst::Model>
 
 =head1 AUTHOR
 

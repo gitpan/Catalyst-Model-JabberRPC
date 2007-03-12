@@ -1,4 +1,4 @@
-Catalyst::Model::JabberRPC version 0.02
+Catalyst::Model::JabberRPC version 0.03
 =======================================
 
 Catalyst model that provide a simple way to communicate with remote processes
@@ -28,7 +28,7 @@ Perl modules:
 
 COPYRIGHT AND LICENCE
 
-Copyright (C) 2006 by Florian Merges <fmerges@cpan.org>
+Copyright (C) 2006-2007 by Florian Merges <fmerges@cpan.org>
 
 This library is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself, either Perl version 5.8.7 or,
